@@ -65,7 +65,6 @@ const formStore = useFormStore()
 
 /* 事件处理区域 */
 
-
 // 当前点击的组件
 const handleClick = (element: any, index: number) => {
   currentIndex.value = index
@@ -103,7 +102,7 @@ const removeAt = (index: number) => {
 }
 
 // 拖拽放下触发
-const dragDown = (e: any) => {
+const dragDown = () => {
   formStore.updateConfig(newList.value)
 }
 
@@ -143,8 +142,6 @@ watch(
 watch(
   () => formStore.currentIndex,
   (newVal) => {
-    console.log('--------------')
-
     const element = formStore.config[newVal]
     handleClick(element, newVal)
   }

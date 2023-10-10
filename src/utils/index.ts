@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import numeral from 'numeral'
 import type { Ref } from "vue"
 
 /**
@@ -161,4 +162,8 @@ export const formatCurrency = (num: number) => {
 
   // 返回格式化后的金额
   return formattedIntegerPart + '元' + formattedDecimalPart
+}
+
+export const useGetImageUrl = (url: string) => {
+  return new URL(`../assets/images/${url}`, import.meta.url).href
 }

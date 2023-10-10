@@ -415,12 +415,12 @@ const rightPanelChange = (e: any, field: string) => {
 watch(
   () => props.currentItem,
   (newVal) => {
-    if (newVal.label) {
+    if (newVal?.label) {
       newCurrentItem.value = newVal
       type.value = newVal.type
       panelWidth.value = 300
     } else {
-      newCurrentItem.value = newVal
+      newCurrentItem.value = newVal ?? {}
       panelWidth.value = 0
     }
   }

@@ -174,7 +174,7 @@ import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import { useFormStore } from '@/stores/form'
-import ElementComps from '@/components/form-generate/ElementComps.vue'
+import ElementComps from './ElementComps.vue'
 import { makeRange, computedDateRangeM } from '@/utils'
 /* ts类型定义区域 */
 
