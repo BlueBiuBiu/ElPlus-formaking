@@ -1,15 +1,34 @@
 <template>
   <!-- 按钮 -->
-  <div v-if="element.type === 'button'" class="item item-flex">
-    <div class="title"></div>
+  <div
+    v-if="element.type === 'button'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    ></div>
     <el-button disabled>
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </el-button>
   </div>
   <!-- 单行文本 -->
-  <div v-if="['single-input', 'number', 'amount'].includes(element.type)" class="item item-flex">
-    <div class="title">
+
+  <div
+    v-if="['single-input', 'number', 'amount'].includes(element.type)"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -23,8 +42,17 @@
     </el-input>
   </div>
   <!-- 多行文本 -->
-  <div v-if="element.type === 'textarea'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'textarea'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -54,8 +82,17 @@
     </el-divider>
   </div>
   <!-- 部门 -->
-  <div v-if="element.type === 'section'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'section'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -64,8 +101,17 @@
     </div>
   </div>
   <!-- 单选框组 -->
-  <div v-if="element.type === 'radio'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'radio'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -80,8 +126,17 @@
     </el-radio-group>
   </div>
   <!-- 多选框组 -->
-  <div v-if="element.type === 'checkbox'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'checkbox'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -96,8 +151,17 @@
     </el-checkbox-group>
   </div>
   <!-- 下拉框组 -->
-  <div v-if="['single-select', 'multiple-select'].includes(element.type)" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="['single-select', 'multiple-select'].includes(element.type)"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -116,14 +180,23 @@
     </el-select>
   </div>
   <!-- 日期选择器 -->
-  <div v-if="element.type === 'date'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'date'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
     <div class="flex-row">
       <el-date-picker
-        style="flex: 1; margin-right: 10px"
+        style="flex: 1; margin-right: 5px"
         type="date"
         :placeholder="element.placeholder"
         value-format="YYYY-MM-DD"
@@ -136,8 +209,17 @@
     </div>
   </div>
   <!-- 时间日期选择器 -->
-  <div v-if="element.type === 'datetime'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'datetime'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -149,37 +231,76 @@
     />
   </div>
   <!-- 日期区间 -->
-  <div v-if="element.type === 'date-range'" class="item item-flex">
-    <template v-for="i in 2" :key="i">
-      <div class="title">
+  <div v-if="element.type === 'date-range'" class="item">
+    <div
+      class="item-flex"
+      :style="{
+        flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+      }"
+      v-for="i in 2"
+      :key="i"
+    >
+      <div
+        class="title"
+        :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+      >
         <span class="require-icon" v-if="element.options.isRequired">
           {{ element[`label${i}`] }}
         </span>
         <span v-else>{{ element[`label${i}`] }}</span>
       </div>
-      <el-date-picker
-        style="width: 100%; margin-bottom: 5px"
-        type="date"
-        :placeholder="element.placeholder"
-        :value-format="element.dateFormat"
-        disabled
-      />
-    </template>
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">
-        {{ element.label3 }}
-      </span>
-      <span v-else>
-        {{ element.label3 }}
-      </span>
+      <div
+        class="item-flex"
+        :style="{
+          flexDirection: 'row'
+        }"
+      >
+        <el-date-picker
+          style="width: 100%; margin-bottom: 5px; margin-right: 5px"
+          type="date"
+          :placeholder="element.placeholder"
+          :value-format="element.dateFormat"
+          disabled
+        />
+        <el-select disabled :placeholder="element.placeholder">
+          <el-option />
+        </el-select>
+      </div>
     </div>
-    <el-input class="sky-item" :placeholder="element.label3Placeholder" disabled>
-      <template v-if="element.appendSlot" #append>{{ element.appendSlotContent }}</template>
-    </el-input>
+    <div
+      class="item-flex"
+      :style="{
+        flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+      }"
+    >
+      <div
+        class="title"
+        :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+      >
+        <span class="require-icon" v-if="element.options.isRequired">
+          {{ element.label3 }}
+        </span>
+        <span v-else>
+          {{ element.label3 }}
+        </span>
+      </div>
+      <el-input class="sky-item" :placeholder="element.label3Placeholder" disabled>
+        <template v-if="element.appendSlot" #append>{{ element.appendSlotContent }}</template>
+      </el-input>
+    </div>
   </div>
   <!-- 图片 -->
-  <div v-if="element.type === 'upload-picture'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'upload-picture'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -188,8 +309,17 @@
     </el-upload>
   </div>
   <!-- 文件 -->
-  <div v-if="element.type === 'upload-file'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'upload-file'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -201,8 +331,17 @@
     </el-upload>
   </div>
   <!-- 自定义组件 -->
-  <div v-if="element.type === 'customComponents'" class="item item-flex">
-    <div class="title">
+  <div
+    v-if="element.type === 'customComponents'"
+    class="item item-flex"
+    :style="{
+      flexDirection: formPropertyConfig.labelPosition === 'top' ? 'column' : 'row'
+    }"
+  >
+    <div
+      class="title"
+      :style="{ marginRight: formPropertyConfig.labelPosition === 'top' ? 0 : '5px' }"
+    >
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
     </div>
@@ -211,8 +350,9 @@
     </slot>
   </div>
 </template>
-
 <script setup lang="ts">
+import { formPropertyConfig } from "./config/element"
+
 defineProps<{ element: any }>()
 </script>
 
@@ -234,7 +374,7 @@ defineProps<{ element: any }>()
     .require-icon {
       position: relative;
       &::after {
-        content: "*";
+        content: '*';
         position: absolute;
         left: 100%;
         top: -2px;

@@ -1,10 +1,15 @@
 <template>
-  <el-form ref="ruleFormRef" :model="formData" :rules="rules">
+  <el-form
+    ref="ruleFormRef"
+    :model="formData"
+    :rules="rules"
+    :label-position="formPropertyConfig.labelPosition"
+  >
     <div v-for="(element, index) in formConfig" :key="index">
       <!-- 日期相关 -->
       <div v-if="element.type === 'date' && formData[element.field]">
         <!-- 年-月-日 -->
-        <el-form-item prop="parentDateValue">
+        <el-form-item :label="element.title" prop="parentDateValue">
           <ElementComps
             :formData="formData['parentDateValue']"
             @update:form-data="
@@ -16,7 +21,11 @@
             :element="element"
           >
             <!-- 上午/下午 -->
-            <el-form-item v-if="element.dateFormat === 'YYYY-MM-DD A'" prop="childDateValue">
+            <el-form-item
+              style="margin-left: 12px"
+              v-if="element.dateFormat === 'YYYY-MM-DD A'"
+              prop="childDateValue"
+            >
               <el-select
                 :placeholder="element.placeholder"
                 v-model="formData[element.field]!.childDateValue"
@@ -30,7 +39,11 @@
               </el-select>
             </el-form-item>
             <!--  时:分 -->
-            <el-form-item v-if="element.dateFormat === 'YYYY-MM-DD hh:mm'" prop="childDateValue">
+            <el-form-item
+              style="margin-left: 12px"
+              v-if="element.dateFormat === 'YYYY-MM-DD hh:mm'"
+              prop="childDateValue"
+            >
               <el-time-picker
                 v-if="element.dateFormat === 'YYYY-MM-DD hh:mm'"
                 value-format="hh:mm"
@@ -48,6 +61,7 @@
         <el-form-item
           v-for="(item, index) in ['begin', 'end']"
           :key="item"
+          :label="element.title"
           :prop="`${item}ParentDateValue`"
         >
           <ElementComps
@@ -66,6 +80,7 @@
           >
             <!-- 上午/下午 -->
             <el-form-item
+              style="margin-left: 12px"
               v-if="element.dateFormat === 'YYYY-MM-DD A'"
               :prop="`${item}ChildDateValue`"
             >
@@ -83,6 +98,7 @@
             </el-form-item>
             <!--  时:分 -->
             <el-form-item
+              style="margin-left: 12px"
               v-if="element.dateFormat === 'YYYY-MM-DD hh:mm'"
               :prop="`${item}ChildDateValue`"
             >
@@ -105,11 +121,7 @@
           </ElementComps>
         </el-form-item>
         <!-- 区间时长 -->
-        <div class="title">
-          <span class="require-icon" v-if="element.options.isRequired">{{ element.label3 }}</span>
-          <span v-else>{{ element.label3 }}</span>
-        </div>
-        <el-form-item prop="dateRange">
+        <el-form-item :label="element.label3" prop="dateRange">
           <el-input
             :placeholder="element.label3Placeholder"
             :model-value="formData[element.field].dateRange"
@@ -128,7 +140,7 @@
 
       <!-- 图片/文件相关 -->
       <div v-else-if="['upload-picture', 'upload-file', 'section'].includes(element.type)">
-        <el-form-item :prop="element.field">
+        <el-form-item :label="element.title" :prop="element.field">
           <ElementComps
             :formData="formData[element.field]"
             @update:form-data="
@@ -144,7 +156,7 @@
 
       <!-- 数字/金额相关 -->
       <div v-else-if="['number', 'amount'].includes(element.type)">
-        <el-form-item :prop="element.field">
+        <el-form-item :label="element.title" :prop="element.field">
           <ElementComps
             :formData="formData[element.field]"
             @update:form-data="
@@ -158,30 +170,55 @@
         </el-form-item>
       </div>
 
+      <!-- 栅栏布局 -->
+      <el-row v-else-if="element.type === 'fence'" :gutter="element.gutter ?? 12">
+        <el-col v-for="fence in element.fenceCount" :span="24 / element.fenceCount" :key="fence">
+          <div v-for="item in element.fenceChildren[`child${fence}`]" :key="item">
+            <el-form-item :label="item.title" :prop="item.field">
+              <ElementComps
+                :formData="formData[element.field][`child${fence}`][item.field]"
+                @update:form-data="
+                  (value: any) => {
+                    formData[element.field][`child${fence}`][item.field] = value
+                    formData[item.field] = value
+                    fenceField?.push(item.field)
+                  }
+                "
+                :element="item"
+              />
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
+
       <!-- 通用 -->
       <div v-else>
-        <el-form-item :prop="element.field">
+        <el-form-item :label="element.title" :prop="element.field">
           <ElementComps v-model:formData="formData[element.field]" :element="element" />
         </el-form-item>
       </div>
     </div>
   </el-form>
-  <!-- <el-button @click="getData(ruleFormRef)">获取数据</el-button> -->
+  <el-button @click="getData">获取数据</el-button>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import { useFormStore } from '@/stores/form'
+import { formPropertyConfig } from '../form-design/config/element'
 import ElementComps from './ElementComps.vue'
 import { makeRange, computedDateRangeM } from '@/utils'
+import { ElMessage } from 'element-plus'
 /* ts类型定义区域 */
 
 /* 定义数据区域 */
 // 有数据时为预览表单
 const props = defineProps<{
-  currentItem?: any
+  currentItem?: {
+    formDesignConfig: any
+    labelPosition: any
+  }
 }>()
 
 const formData = ref<any>({})
@@ -190,6 +227,7 @@ const ruleFormRef = ref<FormInstance>()
 const backupConfig = ref<any[]>([])
 const formStore = useFormStore()
 const formConfig = ref<any[]>([])
+const fenceField = ref<string[]>([]) // 记录栅栏里面所有的元素字段
 
 /* 事件处理区域 */
 // 数值/金额边界判断处理
@@ -231,6 +269,22 @@ const initFormData = () => {
       rules.value['beginParentDateValue'] = item?.rulesConfig?.rules
       rules.value['endParentDateValue'] = item?.rulesConfig?.rules
       // rules.value["dateRange"] = item?.rulesConfig?.rules
+    } else if (item.label === '栅栏布局') {
+      console.log('item', item)
+      formData.value[item.field] = {
+        child1: {},
+        child2: {},
+        child3: {},
+        child4: {},
+        child5: {},
+        child6: {}
+      }
+
+      for (let [key, value] of Object.entries(item.fenceChildren)) {
+        ;(value as any[]).forEach((sun: any) => {
+          rules.value[sun.field] = sun.rulesConfig?.rules
+        })
+      }
     } else {
       formData.value[item.field] = item.defaultValue
       rules.value[item.field] = item?.rulesConfig?.rules
@@ -240,11 +294,22 @@ const initFormData = () => {
 
 // 获取表单数据
 const getData = () => {
+  // console.log(formConfig.value, formData.value)
+  // 过滤掉栅栏中元素只用于验证的字段数据,其数据已在栅栏一个字段里面包裹着
+  const filterFormData: any = { ...formData.value }
+  for (const item of fenceField.value) {
+    console.log(item)
+
+    if (filterFormData[item]) {
+      delete filterFormData[item]
+    }
+  }
+
   return new Promise((resolve, reject) => {
     ruleFormRef.value?.validate((valid) => {
       if (valid) {
-        console.log('submit!', formData)
-        resolve(formData.value)
+        console.log('submit!', filterFormData)
+        resolve(filterFormData)
       } else {
         console.log('error submit!')
         reject(false)
@@ -294,12 +359,14 @@ const disabledMinutes = (hour: number) => {
 
 /* 生命周期 */
 onMounted(() => {
-  if (props.currentItem?.length) {
-    formConfig.value = props.currentItem
+  console.log('props.currentItem', props.currentItem)
+
+  if (props.currentItem?.formDesignConfig) {
+    formConfig.value = props.currentItem.formDesignConfig
+    formPropertyConfig.value.labelPosition = props.currentItem.labelPosition
   } else {
     formConfig.value = formStore.$state.config
   }
-  console.log('formConfig', formConfig.value)
   initFormData()
 })
 </script>

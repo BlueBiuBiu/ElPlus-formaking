@@ -1,9 +1,20 @@
 <template>
-  <div
-    class="right-panel"
-    :style="{ width: `${panelWidth}px`, padding: panelWidth > 0 ? '24px' : 0 }"
-  >
-    <div v-if="Object.keys(newCurrentItem).length">
+  <div class="right-panel" :style="{ width: `${panelWidth}px` }">
+    <!-- 字段属性/表单属性 -->
+    <header class="tabs" v-if="panelWidth > 0">
+      <div :class="['tab', { 'active-tab': currentTab === 0 }]" @click="currentTab = 0">
+        字段属性
+      </div>
+      <div :class="['tab', { 'active-tab': currentTab === 1 }]" @click="currentTab = 1">
+        表单属性
+      </div>
+    </header>
+
+    <!-- 字段属性 -->
+    <div
+      :style="{ padding: panelWidth > 0 ? '24px' : 0 }"
+      v-if="Object.keys(newCurrentItem).length && currentTab === 0"
+    >
       <div class="title">{{ newCurrentItem.title }}</div>
       <!-- 数字相关 -->
       <div class="box" v-if="newCurrentItem.tip">
@@ -322,6 +333,20 @@
         />
       </div>
     </div>
+
+    <!-- 表单属性 -->
+    <div
+      :style="{ padding: panelWidth > 0 ? '24px' : 0 }"
+      v-if="currentTab === 1 && panelWidth > 0"
+    >
+      <div class="box">
+        <div class="title2">标签对齐方式</div>
+        <el-radio-group v-model="formPropertyConfig.labelPosition">
+          <el-radio-button label="left">水平对齐</el-radio-button>
+          <el-radio-button label="top">顶部对齐</el-radio-button>
+        </el-radio-group>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -332,6 +357,7 @@ import { formatAmount, formatCurrency, numberMinChangeM, numberMaxChangeM } from
 import { ElMessage } from 'element-plus'
 import { useJudgeNumberRange, useJudgeOptionFit } from './hooks/judge'
 import { useFormStore } from '@/stores/form'
+import { formPropertyConfig } from './config/element'
 
 /* ts类型定义区域 */
 
@@ -343,6 +369,7 @@ const props = defineProps({
   }
 })
 
+const currentTab = ref(0)
 const newCurrentItem = ref<any>({})
 const type = ref('')
 const panelWidth = ref(0)
@@ -415,12 +442,12 @@ const rightPanelChange = (e: any, field: string) => {
 watch(
   () => props.currentItem,
   (newVal) => {
-    if (newVal?.label) {
+    if (newVal.label) {
       newCurrentItem.value = newVal
       type.value = newVal.type
       panelWidth.value = 300
     } else {
-      newCurrentItem.value = newVal ?? {}
+      newCurrentItem.value = newVal
       panelWidth.value = 0
     }
   }
@@ -433,6 +460,28 @@ watch(
 .gray-color {
   color: #8f959e;
 }
+
+.tabs {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  .tab {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    flex-shrink: 0;
+    border-bottom: 2px solid #f2f3f5;
+    cursor: pointer;
+  }
+  .active-tab {
+    border-color: rgb(var(--primary-6));
+  }
+}
+
 .right-panel {
   // width: 300px;
   height: 100%;
@@ -558,4 +607,3 @@ watch(
   }
 }
 </style>
-../../hooks/judge

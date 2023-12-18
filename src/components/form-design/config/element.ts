@@ -1,4 +1,5 @@
-import { nanoid } from "nanoid"
+import { nanoid } from 'nanoid'
+import { ref } from 'vue'
 
 /**
  *  侧面面板栏配置项说明
@@ -57,94 +58,95 @@ import { nanoid } from "nanoid"
  *    isRequired: true,
  *    requiredLabel: "必填"
  *  }
+ *  fenceCount 栅栏个数
  */
 
 const config = [
   {
-    title: "文本",
+    title: '文本',
     config: [
       {
-        type: "single-input",
-        title: "单行文本",
+        type: 'single-input',
+        title: '单行文本',
         field: nanoid(),
-        tagIcon: "icon-danxingwenben",
-        label: "单行文本",
-        placeholder: "请输入",
+        tagIcon: 'icon-danxingwenben',
+        label: '单行文本',
+        placeholder: '请输入',
         defaultValueRequired: false,
-        defaultValue: "",
+        defaultValue: '',
         rulesConfig: {
-          trigger: "blur",
-          messageTip: "请输入内容",
+          trigger: 'blur',
+          messageTip: '请输入内容',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "textarea",
-        title: "多行文本",
+        type: 'textarea',
+        title: '多行文本',
         field: nanoid(),
-        tagIcon: "icon-duohangwenben",
-        label: "多行文本",
-        placeholder: "请输入",
+        tagIcon: 'icon-duohangwenben',
+        label: '多行文本',
+        placeholder: '请输入',
         defaultValueRequired: false,
-        defaultValue: "",
+        defaultValue: '',
         rulesConfig: {
-          trigger: "blur",
-          messageTip: "请输入内容",
+          trigger: 'blur',
+          messageTip: '请输入内容',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "explain",
-        title: "说明",
+        type: 'explain',
+        title: '说明',
         field: nanoid(),
-        tagIcon: "icon-danxingwenben",
-        label: "说明",
-        defaultValue: "说明"
+        tagIcon: 'icon-danxingwenben',
+        label: '说明',
+        defaultValue: '说明'
       }
     ]
   },
   {
-    title: "数值",
+    title: '数值',
     config: [
       {
-        type: "number",
-        title: "数字",
+        type: 'number',
+        title: '数字',
         field: nanoid(),
-        tagIcon: "icon-shuzi",
-        label: "数字",
-        placeholder: "请输入",
-        tip: "身份证、银行卡等超过 15 位数的情况，请使用文本控件",
-        defaultValue: "",
+        tagIcon: 'icon-shuzi',
+        label: '数字',
+        placeholder: '请输入',
+        tip: '身份证、银行卡等超过 15 位数的情况，请使用文本控件',
+        defaultValue: '',
         minValue: null,
         maxValue: null,
         rulesConfig: {
-          trigger: "blur",
-          messageTip: "请输入数值",
+          trigger: 'blur',
+          messageTip: '请输入数值',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "amount",
-        title: "金额",
+        type: 'amount',
+        title: '金额',
         field: nanoid(),
-        tagIcon: "icon-chongzhi",
+        tagIcon: 'icon-chongzhi',
         appendSlot: true,
-        appendSlotContent: "CNY-人民币元",
-        label: "金额",
-        placeholder: "请输入",
-        defaultValue: "",
+        appendSlotContent: 'CNY-人民币元',
+        label: '金额',
+        placeholder: '请输入',
+        defaultValue: '',
         minValue: null,
         maxValue: null,
         amountFormat: {
@@ -155,234 +157,263 @@ const config = [
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         },
         rulesConfig: {
-          trigger: "blur",
-          messageTip: "请输入数值",
+          trigger: 'blur',
+          messageTip: '请输入数值',
           rules: []
-        },
+        }
       }
     ]
   },
   {
-    title: "选项",
+    title: '选项',
     config: [
       {
-        type: "single-select",
-        title: "单选",
+        type: 'single-select',
+        title: '单选',
         field: nanoid(),
         multiple: false,
-        tagIcon: "icon-xuanzekuanghou",
-        label: "单选",
-        placeholder: "请选择",
+        tagIcon: 'icon-xuanzekuanghou',
+        label: '单选',
+        placeholder: '请选择',
         defaultValueRequired: false,
         defaultValue: null,
         selectOptions: [
           {
-            label: "默认值",
-            value: "默认值"
+            label: '默认值',
+            value: '默认值'
           }
         ],
         rulesConfig: {
-          trigger: "change",
-          messageTip: "请至少选择一项",
+          trigger: 'change',
+          messageTip: '请至少选择一项',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "multiple-select",
-        title: "多选",
+        type: 'multiple-select',
+        title: '多选',
         field: nanoid(),
         multiple: true,
-        tagIcon: "icon-duoxuananniu",
-        label: "多选",
-        placeholder: "请选择",
+        tagIcon: 'icon-duoxuananniu',
+        label: '多选',
+        placeholder: '请选择',
         defaultValueRequired: false,
         defaultValue: null,
         selectOptions: [
           {
-            label: "默认值",
-            value: "默认值"
+            label: '默认值',
+            value: '默认值'
           }
         ],
         rulesConfig: {
-          trigger: "change",
-          messageTip: "请至少选择一项",
+          trigger: 'change',
+          messageTip: '请至少选择一项',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       }
     ]
   },
   {
-    title: "日期",
+    title: '日期',
     config: [
       {
-        type: "date",
-        title: "日期",
+        type: 'date',
+        title: '日期',
         field: nanoid(),
-        dateFormat: "YYYY-MM-DD A",
-        tagIcon: "icon-riqi",
-        label: "日期",
-        placeholder: "请选择",
+        dateFormat: 'YYYY-MM-DD A',
+        tagIcon: 'icon-riqi',
+        label: '日期',
+        placeholder: '请选择',
         dateValue: {
-          parentDateValue: "",
-          childDateValue: ""
+          parentDateValue: '',
+          childDateValue: ''
         },
         selectOptions: [
           {
-            label: "上午",
-            value: "am"
+            label: '上午',
+            value: 'am'
           },
           {
-            label: "下午",
-            value: "pm"
+            label: '下午',
+            value: 'pm'
           }
         ],
         rulesConfig: {
-          trigger: "blur",
-          messageTip: "请选择日期",
+          trigger: 'blur',
+          messageTip: '请选择日期',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "date-range",
-        title: "日期区间",
+        type: 'date-range',
+        title: '日期区间',
         field: nanoid(),
-        dateFormat: "YYYY-MM-DD A",
-        tagIcon: "icon-24gl-calendar",
-        label: "日期区间",
-        label1: "开始时间",
-        label2: "结束时间",
-        label3: "时长 (天)",
-        placeholder: "请选择",
-        label3Placeholder: "自动计算",
+        dateFormat: 'YYYY-MM-DD A',
+        tagIcon: 'icon-24gl-calendar',
+        label: '日期区间',
+        label1: '开始时间',
+        label2: '结束时间',
+        label3: '时长 (天)',
+        placeholder: '请选择',
+        label3Placeholder: '自动计算',
         label3CanEidt: true,
         dateValue: {
-          beginParentDateValue: "",
-          beginChildDateValue: "",
-          endParentDateValue: "",
-          endChildDateValue: "",
-          dateRange: ""
+          beginParentDateValue: '',
+          beginChildDateValue: '',
+          endParentDateValue: '',
+          endChildDateValue: '',
+          dateRange: ''
         },
         selectOptions: [
           {
-            label: "上午",
-            value: "am"
+            label: '上午',
+            value: 'am'
           },
           {
-            label: "下午",
-            value: "pm"
+            label: '下午',
+            value: 'pm'
           }
         ],
         rulesConfig: {
-          trigger: "blur",
-          messageTip: "请选择时间",
+          trigger: 'blur',
+          messageTip: '请选择时间',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       }
     ]
   },
   {
-    title: "其他",
+    title: '其他',
     config: [
       {
-        type: "upload-picture",
-        title: "图片",
+        type: 'upload-picture',
+        title: '图片',
         field: nanoid(),
-        tagIcon: "icon-tupian",
-        label: "图片",
+        tagIcon: 'icon-tupian',
+        label: '图片',
         defaultValue: [],
         rulesConfig: {
-          trigger: "change",
-          messageTip: "请上传文件",
+          trigger: 'change',
+          messageTip: '请上传文件',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "upload-file",
-        title: "附件",
+        type: 'upload-file',
+        title: '附件',
         field: nanoid(),
-        tagIcon: "icon-fujian",
-        label: "附件",
+        tagIcon: 'icon-fujian',
+        label: '附件',
         defaultValue: [],
         rulesConfig: {
-          trigger: "change",
-          messageTip: "请上传文件",
+          trigger: 'change',
+          messageTip: '请上传文件',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       },
       {
-        type: "section",
-        title: "部门",
+        type: 'section',
+        title: '部门',
         field: nanoid(),
-        tagIcon: "icon-bumen",
-        label: "部门",
+        tagIcon: 'icon-bumen',
+        label: '部门',
         defaultValue: [],
         radioValue: 0,
         radioOptions: [
-          { value: 0, label: "可选一个部门" },
-          { value: 1, label: "可选多个部门" }
+          { value: 0, label: '可选一个部门' },
+          { value: 1, label: '可选多个部门' }
         ],
         rulesConfig: {
-          trigger: "change",
-          messageTip: "请选择部门",
+          trigger: 'change',
+          messageTip: '请选择部门',
           rules: []
         },
         options: {
           isRequired: false,
-          requiredLabel: "必填"
+          requiredLabel: '必填'
         }
       }
     ]
   },
   {
-    title: "页面布局",
+    title: '页面布局',
     config: [
       {
-        type: "desc",
-        title: "描述文本",
+        type: 'desc',
+        title: '描述文本',
         field: nanoid(),
-        tagIcon: "icon-danxingwenben",
-        label: "描述文本",
+        tagIcon: 'icon-danxingwenben',
+        label: '描述文本',
         defaultValue: 14, // 字体大小
         minValue: 10,
         maxValue: 30,
         isBold: false
       },
       {
-        type: "divider",
-        title: "分割线",
+        type: 'divider',
+        title: '分割线',
         field: nanoid(),
-        tagIcon: "icon-danxingwenben",
-        label: "分割线"
+        tagIcon: 'icon-danxingwenben',
+        label: '分割线'
+      },
+      {
+        type: 'fence',
+        title: '栅栏布局',
+        field: nanoid(),
+        tagIcon: 'icon-zhagebuju',
+        label: '栅栏布局',
+        fenceCount: 1,
+        fenceChildren: {
+          child1: [],
+          child2: [],
+          child3: [],
+          child4: [],
+          child5: [],
+          child6: []
+        }
       }
     ]
   }
 ]
 
+interface formPropertyConfigType {
+  labelPosition: 'left' | 'top'
+}
+
+// 表单属性
+/**
+ * labelPosition 标签对齐方式
+ */
+const formPropertyConfig = ref<formPropertyConfigType>({
+  labelPosition: 'top'
+})
+
 export default config
+export { formPropertyConfig }

@@ -1,5 +1,6 @@
 <template>
   <div class="content-panel">
+    <div class="title" contenteditable @input="updateFormTitle">{{ formTitle }}</div>
     <draggable
       class="container"
       :list="newList"
@@ -12,19 +13,113 @@
     >
       <template #item="{ element, index }">
         <div
-          @click="handleClick(element, index)"
+          @click.capture="handleClick(element, index)"
           :class="[
             'el',
             { active: currentIndex === index && showOperate },
             { error: element?.hasError === true }
           ]"
         >
-          <element-comps :element="element" />
+          <!-- 栅栏布局 -->
+          <template v-if="element.type === 'fence'">
+            <template v-for="fence in element.fenceCount" :key="fence">
+              <draggable
+                :list="element.fenceChildren[`child${fence}`]"
+                :group="{
+                  name: 'formmaking',
+                  pull: true,
+                  put: handlePut
+                }"
+                itemKey="tid"
+                @click="fenceClick(element, fence, index)"
+                @add="dragDown"
+                @change="handleDragChange($event, fence, index)"
+                :class="[
+                  'fence',
+                  {
+                    active: currentFenceIndex === fence && !showFenceItem && currentIndex === index
+                  }
+                ]"
+              >
+                <template #item="{ element: elementItem, index: indey }">
+                  <div
+                    @click.stop="elementClick(element, indey, fence, index)"
+                    :class="[
+                      'fence-item',
+                      {
+                        active:
+                          currentIndex === index &&
+                          currentFenceIndex === fence &&
+                          currentFenceItemIndex === indey
+                      }
+                    ]"
+                  >
+                    <element-comps :element="elementItem" />
+                    <div
+                      :class="[
+                        'operate',
+                        {
+                          'show-operate':
+                            currentFenceIndex === fence && !showFenceItem && currentIndex === index
+                        }
+                      ]"
+                      @click="removeFence(element, fence)"
+                    >
+                      <el-icon class="icon" :size="14" color="#ffffff"><IEpDelete /></el-icon>
+                    </div>
+                    <div
+                      :class="[
+                        'operate',
+                        {
+                          'show-operate':
+                            currentFenceIndex === fence &&
+                            currentFenceItemIndex === indey &&
+                            showFenceItem &&
+                            currentIndex === index
+                        }
+                      ]"
+                      @click="removeFenceItem(element, indey, fence)"
+                    >
+                      <el-icon class="icon" :size="14" color="#ffffff"><IEpDelete /></el-icon>
+                    </div>
+                  </div>
+                </template>
+              </draggable>
+
+              <!-- 栅栏没有元素时显示 -->
+              <div
+                class="empty-fence-item"
+                v-if="
+                  !element.fenceChildren[`child${fence}`].length &&
+                  currentFenceIndex === fence &&
+                  !showFenceItem &&
+                  currentIndex === index
+                "
+              >
+                <div :class="['operate', 'show-operate']" @click="removeFence(element, fence)">
+                  <el-icon class="icon" :size="14" color="#ffffff"><IEpDelete /></el-icon>
+                </div>
+              </div>
+            </template>
+          </template>
+
+          <element-comps v-else :element="element" />
+
           <div
             v-show="showOperate"
             :class="['operate', { 'show-operate': currentIndex === index }]"
           >
-            <DeleteIcon class="icon" @click.stop="removeAt(index)" />
+            <el-icon
+              v-if="element.type === 'fence'"
+              class="icon"
+              :size="14"
+              color="#ffffff"
+              @click.stop="addFenceCount(element)"
+              ><IEpPlus />
+            </el-icon>
+            <el-icon class="icon" :size="14" color="#ffffff" @click.stop="removeAt(index)">
+              <IEpDelete />
+            </el-icon>
           </div>
         </div>
       </template>
@@ -54,12 +149,19 @@ const props = defineProps({
   list: {
     type: Array,
     default: () => []
+  },
+  currentElementType: {
+    type: String,
+    required: true
   }
 })
 
 const newList = ref<any[]>([])
 const currentIndex = ref(0)
+const currentFenceIndex = ref(-1)
+const currentFenceItemIndex = ref(-1)
 const showOperate = ref(false)
+const showFenceItem = ref(false) // 点击栅栏中的子元素
 const emits = defineEmits(['currentItemClick'])
 const formStore = useFormStore()
 
@@ -67,13 +169,42 @@ const formStore = useFormStore()
 
 // 当前点击的组件
 const handleClick = (element: any, index: number) => {
+  emits('currentItemClick', element)
+
+  // 操作样式的显示/重置
   currentIndex.value = index
   showOperate.value = true
-  emits('currentItemClick', element)
+  showFenceItem.value = false
+  currentFenceIndex.value = -1
+  currentFenceItemIndex.value = -1
+}
+
+// 选择某个位置的栅栏
+const fenceClick = (element: any, fence: number, index: number) => {
+  console.log('fenceClick')
+
+  // 操作样式的显示/重置
+  currentFenceIndex.value = fence
+  currentIndex.value = index
+  currentFenceItemIndex.value = -1
+  showOperate.value = false
+  showFenceItem.value = false
+}
+
+// 选择栅栏中具体选择的元素
+const elementClick = (element: any, indey: number, fence: number, index: number) => {
+  emits('currentItemClick', element.fenceChildren[`child${fence}`][indey])
+
+  // 操作样式的显示/重置
+  currentFenceIndex.value = fence
+  currentIndex.value = index
+  currentFenceItemIndex.value = indey
+  showOperate.value = false
+  showFenceItem.value = true
 }
 
 // 监听组件的移动/添加
-const handleDragChange = (e: any) => {
+const handleDragChange = (e: any, fence?: number, fenceIndex?: number) => {
   console.log('e', e)
 
   if (e.added) {
@@ -81,7 +212,16 @@ const handleDragChange = (e: any) => {
     const element = e.added.element
     const index = e.added.newIndex
     element.field = nanoid() // 使每个组件的字段名都不一样，避免同个组件字段名一样
+
     handleClick(element, index)
+    if (fence && fenceIndex !== undefined) {
+      // 在栅栏布局中添加元素时
+      currentFenceIndex.value = fence
+      currentIndex.value = fenceIndex
+      currentFenceItemIndex.value = index
+      showOperate.value = false
+      showFenceItem.value = true
+    }
     return
   }
 
@@ -89,7 +229,16 @@ const handleDragChange = (e: any) => {
     // 组件移动
     const element = e.moved.element
     const index = e.moved.newIndex
+
     handleClick(element, index)
+    if (fence && fenceIndex !== undefined) {
+      // 在栅栏布局中移动元素时
+      currentFenceIndex.value = fence
+      currentIndex.value = fenceIndex
+      currentFenceItemIndex.value = index
+      showOperate.value = false
+      showFenceItem.value = true
+    }
     return
   }
 }
@@ -99,6 +248,38 @@ const removeAt = (index: number) => {
   newList.value.splice(index, 1)
   emits('currentItemClick', {})
   formStore.updateConfig(newList.value)
+}
+
+// 删除某个位置选择的栅栏
+const removeFence = (element: any, fence: number) => {
+  if (element.fenceCount - 1 < 1) {
+    return
+  }
+  element.fenceCount--
+  for (let i = fence; i <= Object.keys(element.fenceChildren).length; i++) {
+    element.fenceChildren[`child${i}`] = element.fenceChildren[`child${i + 1}`]
+  }
+  element.fenceChildren['child6'] = []
+  if (element.fenceCount < 1) element.fenceCount = 1
+}
+
+// 删除某个位置选择的栅栏的具体选择的元素
+const removeFenceItem = (element: any, index: number, fence: number) => {
+  element.fenceChildren[`child${fence}`].splice(index, 1)
+}
+
+// 增加栅栏数量
+const addFenceCount = (element: any) => {
+  if (element.fenceCount < Object.keys(element.fenceChildren).length) {
+    element.fenceCount++
+  }
+}
+
+// 限制拖放行为，不允许在栅栏布局中放置栅栏
+const handlePut = () => {
+  if (props.currentElementType === '栅栏布局') {
+    return false
+  }
 }
 
 // 拖拽放下触发
@@ -201,6 +382,36 @@ watch(
       }
       .show-operate {
         display: block;
+      }
+      .fence {
+        position: relative;
+        width: 100%;
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid #e5e5e5;
+
+        .fence-item {
+          border: 1px solid rgba(170, 170, 170, 0.5);
+          padding: 2px;
+
+          &:not(:last-child) {
+            margin-bottom: 5px;
+          }
+        }
+      }
+
+      .empty-fence-item {
+        position: relative;
+        .operate {
+          top: 5px;
+          right: 5px;
+        }
+      }
+
+      .active {
+        position: relative;
+        outline: 2px solid #076bb0;
+        border: 1px solid #076bb0;
       }
     }
 

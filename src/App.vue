@@ -13,11 +13,12 @@
       </el-button>
     </header>
     <section>
-      <LeftPanel @click-add="add" />
+      <LeftPanel @click-add="add" @click-add-type="addType"/>
       <ContentPanel
         :list="list"
         @current-item-click="currentItemClick"
         :add-current-index="currentIndex"
+        :current-element-type="currentElementType"
       />
       <RightPanel :current-item="currentItem" />
     </section>
@@ -54,26 +55,27 @@ import { useGetImageUrl } from './utils'
 const formStore = useFormStore()
 const list = ref<any[]>([])
 const currentItem = ref({})
-let currentIndex = ref(-1)
+const currentIndex = ref(-1)
+const currentElementType = ref("")
 const previewVisible = ref(false)
 const dialogVisible = ref(false)
 const currentTitle = ref('')
 const operations = ref([
   {
     title: '预览',
-    href: useGetImageUrl('preview.svg'),
+    href: useGetImageUrl('preview.svg')
   },
   {
     title: '清空',
-    href: useGetImageUrl('clean.svg'),
+    href: useGetImageUrl('clean.svg')
   },
   {
     title: '导入JSON',
-    href: useGetImageUrl('import.svg'),
+    href: useGetImageUrl('import.svg')
   },
   {
     title: '生成JSON',
-    href: useGetImageUrl('json.svg'),
+    href: useGetImageUrl('json.svg')
   }
 ])
 const components = ['', '', markRaw(ImportJson), markRaw(GenJson)]
@@ -90,6 +92,10 @@ const add = (element: any) => {
   formStore.config = list.value
   formStore.computeErrorContent()
   formStore.currentIndex = list.value.length - 1
+}
+
+const addType = (elementType: string) => {
+  currentElementType.value = elementType
 }
 
 // 点击功能

@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+
+:root {
+  // element plus主题色修改
+  --el-color-primary: #076bb0 !important;
+}
+
+html,
+body,
+#app,
+body {
+  font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, 'microsoft yahei', arial, STHeiTi,
+    sans-serif;
+  background: #f2f3f5;
+}
+
+
+img {
+  vertical-align: top;
+  object-fit: cover;
+}
+
+/*滚动条整体粗细样式*/
+::-webkit-scrollbar {
+  /*高宽分别对应横竖滚动条的尺寸*/
+  width: 5px;
+  height: 8px;
+}
+
+/*滚动条里面小方块*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px !important;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
+  /* 颜色 */
+  /* background:#b6b6b6!important; */
+  /* 线性渐变背景 */
+  background-color: #bebebe;
+}
+
+/*滚动条轨道*/
+::-webkit-scrollbar-track {
+  // border-radius: 10px !important;
+  // box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
+  background-color: transparent !important;
+}

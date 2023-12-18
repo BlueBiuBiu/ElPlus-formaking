@@ -8,6 +8,7 @@
           :list="item.config"
           :group="{ name: 'formmaking', pull: 'clone', put: false }"
           :clone="defaultClone"
+          @start="onStart"
           itemKey="type"
         >
           <template #item="{ element }">
@@ -33,12 +34,17 @@ const defaultClone = (item: any) => {
   return JSON.parse(JSON.stringify(item))
 }
 
-const emits = defineEmits(["clickAdd"])
+const emits = defineEmits(["clickAdd", "clickAddType"])
 
 /* 事件处理区域 */
 // 点击自动添加到列表
 const add = (element: any) => {
   emits("clickAdd", JSON.parse(JSON.stringify(element)))
+}
+
+// 点击拖拽的组件类型
+const onStart = (element: any) => {
+  emits("clickAddType", element.clone.innerText)
 }
 
 /* 监听 */

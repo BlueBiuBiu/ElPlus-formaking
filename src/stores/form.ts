@@ -57,7 +57,7 @@ export const useFormStore = defineStore("formStore", {
 
           // 判断组件的label是否一样
           if (
-            !["explain", "desc", "divider", "date-range"].includes(item.type) &&
+            !['explain', 'desc', 'divider', 'date-range', 'fence'].includes(item.type) &&
             item.label === iten.label
           ) {
             flag = true

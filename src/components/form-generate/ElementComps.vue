@@ -1,7 +1,6 @@
 <template>
   <!-- 按钮 -->
   <div v-if="element.type === 'button'" class="item-flex">
-    <div class="title"></div>
     <el-button>
       <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
       <span v-else>{{ element.label }}</span>
@@ -10,10 +9,6 @@
 
   <!-- 单行文本 -->
   <div v-if="['single-input', 'amount'].includes(element.type)" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-input
       class="sky-item"
       :placeholder="element.placeholder"
@@ -27,10 +22,6 @@
 
   <!-- 多行文本 -->
   <div v-if="element.type === 'textarea'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-input
       class="sky-item"
       type="textarea"
@@ -42,10 +33,6 @@
 
   <!-- 数字 -->
   <div v-if="element.type === 'number'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-input
       class="sky-item"
       :placeholder="element.placeholder"
@@ -79,10 +66,6 @@
 
   <!-- 部门 -->
   <div v-if="element.type === 'section'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <div class="section" @click="addModelVisible = true">
       <el-icon><IEpPlus /></el-icon>
     </div>
@@ -117,10 +100,6 @@
 
   <!-- 单选框组 -->
   <div v-if="element.type === 'radio'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-radio-group
       :class="element.layout === '垂直布局' ? 'radio-verticel' : 'radio-horizontal'"
       :model-value="formData"
@@ -133,10 +112,6 @@
 
   <!-- 多选框组 -->
   <div v-if="element.type === 'checkbox'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-checkbox-group
       :class="element.layout === '垂直布局' ? 'radio-verticel' : 'radio-horizontal'"
       :model-value="formData"
@@ -149,10 +124,6 @@
 
   <!-- 下拉框组 -->
   <div v-if="['single-select', 'multiple-select'].includes(element.type)" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-select
       :placeholder="element.placeholder"
       size="large"
@@ -171,13 +142,9 @@
 
   <!-- 日期选择器 -->
   <div v-if="element.type === 'date'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <div class="flex-row">
       <el-date-picker
-        style="flex: 1; margin-right: 10px"
+        style="flex: 1"
         type="date"
         :placeholder="element.placeholder"
         value-format="YYYY-MM-DD"
@@ -190,10 +157,6 @@
 
   <!-- 时间日期选择器 -->
   <div v-if="element.type === 'datetime'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <el-date-picker
       type="datetime"
       :placeholder="element.placeholder"
@@ -205,13 +168,9 @@
 
   <!-- 日期区间 -->
   <div v-if="element.type === 'date-range'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ label }}</span>
-      <span v-else>{{ label }}</span>
-    </div>
     <div class="flex-row">
       <el-date-picker
-        style="flex: 1; margin-right: 10px"
+        style="flex: 1"
         type="date"
         :placeholder="element.placeholder"
         value-format="YYYY-MM-DD"
@@ -225,19 +184,15 @@
 
   <!-- 图片 -->
   <div v-if="element.type === 'upload-picture'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <!-- 使用el-upload时会跟mockjs冲突，有类型错误，发布时要注释掉mockjs -->
     <el-upload
       class="upload-picture"
+      v-model:file-list="imagesList"
       :auto-upload="false"
       action="#"
       multiple
       accept=".jpg,.png,.gif,.svg,.jpeg,.heic"
       list-type="picture-card"
-      :before-upload="() => false"
       :on-change="handlePictureChange"
       :on-preview="handlePictureCardPreview"
       :on-remove="handlePictureRemove"
@@ -251,19 +206,16 @@
 
   <!-- 文件 -->
   <div v-if="element.type === 'upload-file'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <!-- 使用el-upload时会跟mockjs冲突，有类型错误，发布时要注释掉mockjs -->
     <el-upload
       class="upload-file"
+      v-model:file-list="fileList"
       :auto-upload="false"
       action="#"
       multiple
-      :before-upload="() => false"
       :on-change="handleFileChange"
       :on-remove="handleFileRemove"
+      :on-exceed="handleExceed"
     >
       <el-button style="width: 100%">
         <el-icon><IEpUpload /></el-icon>
@@ -274,10 +226,6 @@
 
   <!-- 自定义组件 -->
   <div v-if="element.type === 'customComponents'" class="item-flex">
-    <div class="title">
-      <span class="require-icon" v-if="element.options.isRequired">{{ element.label }}</span>
-      <span v-else>{{ element.label }}</span>
-    </div>
     <slot :name="element.slotName">
       <div>{{ element.slotName }}</div>
     </slot>
@@ -285,10 +233,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import type { UploadProps } from "element-plus"
-import AddSection from "../form-design/modals/add-section.vue"
-import dayjs from "dayjs"
+import { ref } from 'vue'
+import type { UploadProps } from 'element-plus'
+import AddSection from '../form-design/modals/add-section.vue'
+import dayjs from 'dayjs'
 
 /* 定义数据区域 */
 const props = defineProps<{
@@ -298,41 +246,43 @@ const props = defineProps<{
   disabledDate?: boolean // 禁用的时间
   minParentDate?: string // 起始父时间
 }>()
-const emits = defineEmits(["update:formData", "inputBlur"])
+const emits = defineEmits(['update:formData', 'inputBlur'])
 
+const fileList = ref<UploadUserFile[]>() // 上传的文件
+const imagesList = ref<UploadUserFile[]>() // 上传的图片
 const previewFile = ref(false)
-const previewFileUrl = ref("")
+const previewFileUrl = ref('')
 // 部门相关
 const addModelVisible = ref(false)
 const sections = ref<any[]>([])
 
 /* 事件处理区域 */
 const handleChange = (value: any, field: string) => {
-  emits("update:formData", value)
+  emits('update:formData', value)
 }
 
 // 选择上传图片
-const handlePictureChange: UploadProps["onChange"] = (uploadFile, uploadFiles) => {
-  emits("update:formData", { pictures: uploadFiles })
+const handlePictureChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+  emits('update:formData', { pictures: uploadFiles })
 }
 
 // 移除上传图片
-const handlePictureRemove: UploadProps["onRemove"] = (uploadFile, uploadFiles) => {
-  emits("update:formData", { pictures: uploadFiles })
+const handlePictureRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+  emits('update:formData', { pictures: uploadFiles })
 }
 
 // 选择上传文件
-const handleFileChange: UploadProps["onChange"] = (uploadFile, uploadFiles) => {
-  emits("update:formData", { files: uploadFiles })
+const handleFileChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+  emits('update:formData', { files: uploadFiles })
 }
 
 // 移除上传文件
-const handleFileRemove: UploadProps["onRemove"] = (uploadFile, uploadFiles) => {
-  emits("update:formData", { files: uploadFiles })
+const handleFileRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+  emits('update:formData', { files: uploadFiles })
 }
 
 // 上传图片预览
-const handlePictureCardPreview: UploadProps["onPreview"] = (uploadFile) => {
+const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
   previewFileUrl.value = uploadFile.url!
   previewFile.value = true
 }
@@ -341,14 +291,14 @@ const handlePictureCardPreview: UploadProps["onPreview"] = (uploadFile) => {
 const selectSection = (arr: Object[]) => {
   sections.value = arr
   addModelVisible.value = false
-  emits("update:formData", sections.value)
+  emits('update:formData', sections.value)
 }
 
 // 删除部门人员
 const delSection = (section: any) => {
   const index = sections.value.findIndex((item) => item.id === section.id)
   sections.value.splice(index, 1)
-  emits("update:formData", sections.value)
+  emits('update:formData', sections.value)
 }
 
 // 日期区间禁用掉的时间（用于禁掉起始时间的判断）
@@ -380,7 +330,7 @@ const disabledDate = (time: Date) => {
     .require-icon {
       position: relative;
       &::after {
-        content: "*";
+        content: '*';
         position: absolute;
         left: 100%;
         top: -2px;
